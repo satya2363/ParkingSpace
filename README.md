@@ -25,6 +25,6 @@ Install MySQL workbench
 -	Run java app and check tables http://localhost:8080/all
 
 ### Git Tips:
-If you’re using company laptop – make sure you change your git credentials to commit using in this project – run these commands to change
+Make sure you change your git credentials to commit using in this project – run these commands to change
 -	git config user.name "Your Name Here"
 -	git config user.email your@email.com
