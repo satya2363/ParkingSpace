@@ -18,6 +18,7 @@ Install Java and add path to environment variables
 Setup MySQL and add path to environment variables
 Install MySQL workbench 
 -	How to setup mySQL to project - https://spring.io/guides/gs/accessing-data-mysql/
+-   Setup Lombok to your IDE - https://www.baeldung.com/lombok-ide
 
 ## Tips:
 -	Use local terminal for mvn clean install on windows since git bash uses linux and java lies in program files folder which has a space
@@ -25,6 +26,6 @@ Install MySQL workbench
 -	Run java app and check tables http://localhost:8080/all
 
 ### Git Tips:
-Make sure you change your git credentials to commit using in this project – run these commands to change
+Make sure you change your git credentials to commit using in this project ï¿½ run these commands to change
 -	git config user.name "Your Name Here"
 -	git config user.email your@email.com
