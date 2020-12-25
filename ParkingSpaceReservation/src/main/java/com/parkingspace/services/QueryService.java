@@ -45,4 +45,15 @@ public class QueryService implements IQueryService {
         return null;
     }
 
+    public List<ParkingSpot> spotQuery(int parkingLotId) {
+        EntityManager em = emf.createEntityManager();
+
+        Query query = em.createQuery("select ps.id,ps.number,ps.isFree,ps.type,vh.vehicleLicenseNumber, vh.vehicleType, fl.floorId"
+                + "from Vehicle as vh, from Floor as fl, from ParkingSpot as ps where ps.parkingLotId="
+                + parkingLotId + " and vh.vehicleLicenseNumber = ps.vehicleLicenseNumber and fl.id = ps.floorId\n" + "");
+        @SuppressWarnings("unchecked")
+        List<ParkingSpot> parkingSpots = query.getResultList();
+        em.close();
+        return parkingSpots;
+    }
 }

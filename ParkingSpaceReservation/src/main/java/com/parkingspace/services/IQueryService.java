@@ -10,4 +10,5 @@ public interface IQueryService {
     List<ParkingLot> parkingLotQuery(String city, int zipcode);
 
     ParkingAvailabilityDTO getParkingLotAvailability(int parkingId, int floorNumber);
+    List<ParkingoSpot> spotQuery(int parkingLotId);
 }
