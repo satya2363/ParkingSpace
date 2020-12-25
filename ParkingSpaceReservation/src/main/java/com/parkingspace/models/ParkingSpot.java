@@ -26,33 +26,28 @@ public class ParkingSpot implements Serializable {
      */
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(
-            strategy = GenerationType.AUTO)
-    @Column(
-            name = "id")
-    private int               id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
+    private int id;
 
-    @Column(
-            name = "number")
-    private int               number;
+    @Column(name = "number")
+    private String number;
 
-    @Column(
-            name = "is_free")
-    private String            isFree;
+    @Column(name = "is_free")
+    private boolean isFree;
 
-    @Column(
-            name = "type")
-    private String            type;
+    @Column(name = "type")
+    private String type;
 
-    @ManyToOne(
-            cascade = CascadeType.ALL)
-    @JoinColumn(
-            name = "floor_id",
-            referencedColumnName = "id")
-    private Floor             floor;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "floor_id", referencedColumnName = "id")
+    private Floor floor;
 
-    @Column(
-            name = "license_number")
-    private String            licenseNumber;
+    @Column(name = "license_number")
+    private String licenseNumber;
 
+    // TODO: understand why license number join wasnt needed?
+//    @OneToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "vehicle_license_number", referencedColumnName = "vehicle_license_number")
+//    private String vehicleLicenseNumber;
 }

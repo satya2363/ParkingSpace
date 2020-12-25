@@ -1,0 +1,29 @@
+package com.parkingspace.models;
+
+import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Data
+@NoArgsConstructor
+public class Vehicle implements Serializable {
+
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @Column(name = "vehicle_license_number")
+    private String vehicleLicenseNumber;
+
+    @Column(name = "vehicle_type")
+    private String vehicleType;
+}

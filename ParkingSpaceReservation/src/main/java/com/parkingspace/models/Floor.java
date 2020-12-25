@@ -54,11 +54,12 @@ public class Floor implements Serializable {
             referencedColumnName = "id")
     private ParkingLot        parkingLot;
 
-    //    @OneToOne(
-    //            cascade = CascadeType.ALL)
-    //    @JoinColumn(
-    //            name = "spot_type_count_id",
-    //            referencedColumnName = "id")
-    //    private SpotTypeCount     spotTypeCount;
+//    @OneToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "spot_type_count_id", referencedColumnName = "id")
+//    private int spotTypeCountId;
+//
+//    @OneToMany(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "spot_id", referencedColumnName = "id")
+//    private int spotId;
 
 }
