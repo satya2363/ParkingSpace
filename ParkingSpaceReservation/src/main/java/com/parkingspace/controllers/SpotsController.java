@@ -24,13 +24,6 @@ public class SpotsController {
     @Autowired
     QueryService      queryService;
 
-    @RequestMapping(
-            value = "/greeting")
-    public String getHelloWorld() {
-        String message = "Hello World !";
-        return message;
-    }
-
     @GetMapping(
             path = "/spotsByParkingLot")
     public @ResponseBody Iterable<ParkingSpot> getAvailableParkingSpots(@RequestParam int parkingLotId) {

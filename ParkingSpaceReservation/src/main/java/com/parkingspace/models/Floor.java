@@ -59,7 +59,7 @@ public class Floor implements Serializable {
 //    @JoinColumn(name = "spot_id", referencedColumnName = "id")
 //    private int spotId;
 
-    @OneToMany(mappedBy = "spots")
+    @OneToMany(mappedBy = "floor")
     private Set<ParkingSpot> spots;
 
     @ManyToOne(cascade = CascadeType.ALL)

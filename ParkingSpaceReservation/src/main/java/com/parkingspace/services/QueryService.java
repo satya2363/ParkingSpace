@@ -49,8 +49,9 @@ public class QueryService implements IQueryService {
     public List<ParkingSpot> spotQuery(int parkingLotId) {
         EntityManager em = emf.createEntityManager();
 
-        Query query = em.createQuery("select * from ParkingSpot as ps, from Floor as fl where ps.isFree = true and fl.totalSpots > 0 "
-                + "and ps.parkingLotId="+ parkingLotId + "and fl.id = ps.floorId\n" + "");
+        Query query = em.createQuery("select ps.isFree, ps.number, ps.type, ps.id from ParkingSpot as ps");
+//                + ", from Floor as fl where ps.isFree = true and fl.totalSpots > 0 "
+//                + "and ps.parkingLotId="+ parkingLotId + "and fl.id = ps.floorId\n" + "");
         @SuppressWarnings("unchecked")
         List<ParkingSpot> parkingSpots = query.getResultList();
         em.close();
