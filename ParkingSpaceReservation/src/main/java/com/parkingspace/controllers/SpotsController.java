@@ -33,7 +33,7 @@ public class SpotsController {
 
     @GetMapping(
             path = "/spotsByParkingLot")
-    public @ResponseBody Iterable<ParkingSpot> getAllParkingSpots(@RequestParam int parkingLotId) {
+    public @ResponseBody Iterable<ParkingSpot> getAvailableParkingSpots(@RequestParam int parkingLotId) {
         return queryService.spotQuery(parkingLotId);
     }
 }

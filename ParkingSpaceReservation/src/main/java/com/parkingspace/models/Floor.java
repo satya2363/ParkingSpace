@@ -3,6 +3,7 @@ package com.parkingspace.models;
 import java.io.Serializable;
 import java.util.Set;
 
+import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -58,7 +59,10 @@ public class Floor implements Serializable {
 //    @JoinColumn(name = "spot_id", referencedColumnName = "id")
 //    private int spotId;
 
+    @OneToMany(mappedBy = "spots")
+    private Set<ParkingSpot> spots;
+
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "parking_lot_id", referencedColumnName = "id")
-    private ParkingLot parkingLotId;
+    private ParkingLot parkingLot;
 }

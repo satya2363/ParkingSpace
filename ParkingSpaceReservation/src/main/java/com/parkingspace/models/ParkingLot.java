@@ -3,6 +3,8 @@ package com.parkingspace.models;
 import java.io.Serializable;
 import java.util.Set;
 
+import java.util.List;
+import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -28,28 +30,20 @@ public class ParkingLot implements Serializable {
      */
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(
-            strategy = GenerationType.AUTO)
-    @Column(
-            name = "id")
-    private int               id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
+    private int id;
 
-    @Column(
-            name = "name")
-    private String            name;
+    @Column(name = "name")
+    private String name;
 
-    @OneToOne(
-            cascade = CascadeType.ALL)
-    @JoinColumn(
-            name = "address_id",
-            referencedColumnName = "id")
-    private Location          address;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "address_id", referencedColumnName = "id")
+    private Location address;
 
-    @Column(
-            name = "is_full")
-    private String            isFull;
+    @Column(name = "is_full")
+    private String isFull;
 
-    @OneToMany(
-            mappedBy = "parkingLot")
-    private Set<Floor>        floors;
+    @OneToMany(mappedBy = "parkingLot")
+    private Set<Floor> floors;
 }
