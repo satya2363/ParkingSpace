@@ -1,5 +1,6 @@
 package com.parkingspace.services;
 
+import com.parkingspace.models.ParkingSpot;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -48,9 +49,8 @@ public class QueryService implements IQueryService {
     public List<ParkingSpot> spotQuery(int parkingLotId) {
         EntityManager em = emf.createEntityManager();
 
-        Query query = em.createQuery("select ps.id,ps.number,ps.isFree,ps.type,vh.vehicleLicenseNumber, vh.vehicleType, fl.floorId"
-                + "from Vehicle as vh, from Floor as fl, from ParkingSpot as ps where ps.parkingLotId="
-                + parkingLotId + " and vh.vehicleLicenseNumber = ps.vehicleLicenseNumber and fl.id = ps.floorId\n" + "");
+        Query query = em.createQuery("select * from ParkingSpot as ps, from Floor as fl where ps.isFree = true and fl.totalSpots > 0 "
+                + "and ps.parkingLotId="+ parkingLotId + "and fl.id = ps.floorId\n" + "");
         @SuppressWarnings("unchecked")
         List<ParkingSpot> parkingSpots = query.getResultList();
         em.close();

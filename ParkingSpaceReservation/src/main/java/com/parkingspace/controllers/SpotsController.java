@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.parkingspace.models.Location;
 import com.parkingspace.models.ParkingLot;
+import com.parkingspace.models.ParkingSpot;
 import com.parkingspace.repositories.ParkingRepository;
 import com.parkingspace.services.QueryService;
 
@@ -30,7 +31,6 @@ public class SpotsController {
         return message;
     }
 
-    // by parking location | parking lot id
     @GetMapping(
             path = "/spotsByParkingLot")
     public @ResponseBody Iterable<ParkingSpot> getAllParkingSpots(@RequestParam int parkingLotId) {

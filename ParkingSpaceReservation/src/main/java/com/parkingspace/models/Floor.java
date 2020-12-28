@@ -12,10 +12,14 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import com.parkingspace.models.ParkingLot;
+import com.parkingspace.models.ParkingSpot;
 
 @Entity
 @Data
@@ -25,34 +29,26 @@ public class Floor implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(
-            strategy = GenerationType.AUTO)
-    @Column(
-            name = "id")
-    private int               id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
+    private int id;
 
-    @Column(
-            name = "number")
-    private String            number;
+    @Column(name = "number")
+    private String number;
 
-    @Column(
-            name = "total_spots")
-    private int               totalSpots;
+    @Column(name = "total_spots")
+    private int totalSpots;
 
-    @Column(
-            name = "spots_available")
-    private String            spotsAvailable;
+    @Column(name = "spots_available")
+    private String spotsAvailable;
 
-    @OneToMany(
-            mappedBy = "floor")
-    private Set<ParkingSpot>  spots;
+    @OneToMany(mappedBy = "floor")
+    private Set<ParkingSpot> spots;
 
-    @ManyToOne(
-            cascade = CascadeType.ALL)
-    @JoinColumn(
-            name = "parking_id",
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "parking_id",
             referencedColumnName = "id")
-    private ParkingLot        parkingLot;
+    private ParkingLot parkingLot;
 
 //    @OneToOne(cascade = CascadeType.ALL)
 //    @JoinColumn(name = "spot_type_count_id", referencedColumnName = "id")
@@ -62,4 +58,7 @@ public class Floor implements Serializable {
 //    @JoinColumn(name = "spot_id", referencedColumnName = "id")
 //    private int spotId;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "parking_lot_id", referencedColumnName = "id")
+    private ParkingLot parkingLotId;
 }
