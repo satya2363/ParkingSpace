@@ -34,11 +34,11 @@ public class ParkingSpot implements Serializable {
 
     @Column(
             name = "number")
-    private String            number;
+    private int               number;
 
     @Column(
             name = "is_free")
-    private boolean           isFree;
+    private String            isFree;
 
     @Column(
             name = "type")
@@ -53,6 +53,6 @@ public class ParkingSpot implements Serializable {
 
     @Column(
             name = "license_number")
-    private int               vehicle_license_number;
+    private String            vehicle_license_number;
 
 }
