@@ -1,7 +1,6 @@
 package com.parkingspace.models;
 
 import java.io.Serializable;
-import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -24,36 +23,36 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Floor implements Serializable {
 
-    private static final long    serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(
             strategy = GenerationType.AUTO)
     @Column(
             name = "id")
-    private int                  id;
+    private int               id;
 
     @Column(
             name = "number")
-    private String               number;
+    private String            number;
 
     @Column(
             name = "total_spots")
-    private int                  total_spots;
+    private int               totalSpots;
 
     @Column(
             name = "spots_available")
-    private String               spots_available;
+    private String            spotsAvailable;
 
     @OneToMany(
             mappedBy = "floor")
-    private Set<ParkingSpot>     spots;
+    private Set<ParkingSpot>  spots;
 
     @ManyToOne(
             cascade = CascadeType.ALL)
     @JoinColumn(
             name = "parking_id",
             referencedColumnName = "id")
-    private ParkingLot           parkingLot;
+    private ParkingLot        parkingLot;
 
     //    @OneToOne(
     //            cascade = CascadeType.ALL)
@@ -61,7 +60,5 @@ public class Floor implements Serializable {
     //            name = "spot_type_count_id",
     //            referencedColumnName = "id")
     //    private SpotTypeCount     spotTypeCount;
-
-    private Map<String, Integer> spotTypeCount;
 
 }

@@ -45,12 +45,21 @@ public class ParkingTicket {
             name = "status")
     String    status;
     @Column(
+            name = "parking_lot_id")
+    int       parkingLotId;
+
+    @Column(
+            name = "parking_lot_name")
+    String    parkingLotName;
+
+    @Column(
             name = "floor_number")
-    int       floorNumber;
+    String    floorNumber;
     @Column(
             name = "spot_number")
     int       spotNumber;
     @Column(
             name = "bar_code")
     String    barCode;
+
 }
