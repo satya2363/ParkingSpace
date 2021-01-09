@@ -53,6 +53,6 @@ public class ParkingSpot implements Serializable {
 
     @Column(
             name = "license_number")
-    private String            vehicle_license_number;
+    private String            licenseNumber;
 
 }

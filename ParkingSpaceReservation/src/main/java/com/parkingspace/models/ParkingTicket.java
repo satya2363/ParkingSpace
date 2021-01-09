@@ -59,6 +59,10 @@ public class ParkingTicket {
             name = "spot_number")
     int       spotNumber;
     @Column(
+            name = "license_number")
+    String    licenseNumber;
+
+    @Column(
             name = "bar_code")
     String    barCode;
 

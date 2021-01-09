@@ -22,7 +22,7 @@ public class QueryService implements IQueryService {
     @Autowired
     TicketRepository     ticketRepo;
 
-    // may be try to put ina DTO
+    //TODO: may be try to put in a DTO
     @Override
     public List<ParkingLot> parkingLotQuery(String city, int zipcode) {
         EntityManager em = emf.createEntityManager();

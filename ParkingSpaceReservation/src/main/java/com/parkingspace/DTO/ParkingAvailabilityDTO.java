@@ -7,10 +7,11 @@ public class ParkingAvailabilityDTO {
     private String spotsAvailable;
     private int    floorId;
 
-    public ParkingAvailabilityDTO(String isFull, int totalSpots, String spotsAvailable) {
+    public ParkingAvailabilityDTO(String isFull, int totalSpots, String spotsAvailable, int floorId) {
         this.isFull = isFull;
         this.spotsAvailable = spotsAvailable;
         this.totalSpots = totalSpots;
+        this.floorId = floorId;
     }
 
     public String getIsFull() {

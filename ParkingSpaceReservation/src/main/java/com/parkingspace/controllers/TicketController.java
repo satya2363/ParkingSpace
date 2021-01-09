@@ -13,17 +13,27 @@ import org.springframework.web.bind.annotation.RestController;
 import com.parkingspace.DTO.ParkingAvailabilityDTO;
 import com.parkingspace.models.ParkingTicket;
 import com.parkingspace.repositories.ParkingRepository;
+import com.parkingspace.repositories.ParkingSpotRepository;
+import com.parkingspace.repositories.TicketRepository;
 import com.parkingspace.services.QueryService;
 
 @RestController
 public class TicketController {
-    Logger                   log = LoggerFactory.getLogger(TicketController.class);
+    Logger                       log     = LoggerFactory.getLogger(TicketController.class);
 
     @Autowired
-    QueryService             queryService;
+    QueryService                 queryService;
 
     @Autowired
-    public ParkingRepository parkingRepo;
+    public ParkingRepository     parkingRepo;
+
+    @Autowired
+    public TicketRepository      ticketRepo;
+
+    @Autowired
+    public ParkingSpotRepository parkingSpotRepo;
+
+    private String               IS_FREE = "false";
 
     @PostMapping(
             path = "/generateTicket")
@@ -35,8 +45,10 @@ public class TicketController {
         ParkingAvailabilityDTO parkingDTO = parkingRepo.parkingLotAvailable(ticket.getParkingLotId(), ticket.getFloorNumber());
 
         if (parkingDTO.getIsFull().equals("false")) {
-            log.info("Pots are available");
+            log.info("Spots are available");
+            parkingSpotRepo.updateSlot(IS_FREE, ticket.getLicenseNumber(), ticket.getSpotNumber(), parkingDTO.getFloorId());
             //if total spots<2 total spots =0, is available=false 
+
         } else {
 
         }
