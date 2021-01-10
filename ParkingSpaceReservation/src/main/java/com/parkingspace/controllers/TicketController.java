@@ -1,5 +1,7 @@
 package com.parkingspace.controllers;
 
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,21 +55,20 @@ public class TicketController {
             parkingSpotRepo.updateSlot(IS_FREE, ticket.getLicenseNumber(), ticket.getSpotNumber(), parkingDTO.getFloorId());
             String spotsAvailable = parkingDTO.getTotalSpots() < 2 ? "false" : "true";
             floorRepo.updateFloor(spotsAvailable, ticket.getFloorNumber(), parkingDTO.getTotalSpots() - 1, ticket.getParkingLotId());
-            ticketRepo.save(ticket);
+            ParkingTicket pt = ticketRepo.save(ticket);
+            return pt != null ? true : false;
         } else {
             log.error("No more Spots Available");
             //Throw exception
+            return false;
         }
 
-        return false;
         //return queryService.parkingLotQuery(city, zipcode);
     }
 
     @GetMapping(
             path = "/getTicket")
-    public @ResponseBody ParkingTicket getTicket(@RequestParam int ticketNumber) {
-
-        return null;
-        //return queryService.parkingLotQuery(city, zipcode);
+    public @ResponseBody Optional<ParkingTicket> getTicket(@RequestParam int ticketId) {
+        return ticketRepo.findById(ticketId);
     }
 }
