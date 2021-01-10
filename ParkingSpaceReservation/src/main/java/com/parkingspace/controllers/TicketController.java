@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.parkingspace.DTO.ParkingAvailabilityDTO;
 import com.parkingspace.models.ParkingTicket;
+import com.parkingspace.repositories.FloorRepository;
 import com.parkingspace.repositories.ParkingRepository;
 import com.parkingspace.repositories.ParkingSpotRepository;
 import com.parkingspace.repositories.TicketRepository;
@@ -33,6 +34,9 @@ public class TicketController {
     @Autowired
     public ParkingSpotRepository parkingSpotRepo;
 
+    @Autowired
+    public FloorRepository       floorRepo;
+
     private String               IS_FREE = "false";
 
     @PostMapping(
@@ -47,10 +51,12 @@ public class TicketController {
         if (parkingDTO.getIsFull().equals("false")) {
             log.info("Spots are available");
             parkingSpotRepo.updateSlot(IS_FREE, ticket.getLicenseNumber(), ticket.getSpotNumber(), parkingDTO.getFloorId());
-            //if total spots<2 total spots =0, is available=false 
-
+            String spotsAvailable = parkingDTO.getTotalSpots() < 2 ? "false" : "true";
+            floorRepo.updateFloor(spotsAvailable, ticket.getFloorNumber(), parkingDTO.getTotalSpots() - 1, ticket.getParkingLotId());
+            ticketRepo.save(ticket);
         } else {
-
+            log.error("No more Spots Available");
+            //Throw exception
         }
 
         return false;
