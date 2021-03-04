@@ -13,6 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -42,11 +44,10 @@ public class Floor implements Serializable {
     @Column(
             name = "spots_available")
     private String            spotsAvailable;
-
+    @JsonIgnore
     @OneToMany(
             mappedBy = "floor")
     private Set<ParkingSpot>  spots;
-
     @ManyToOne(
             cascade = CascadeType.ALL)
     @JoinColumn(

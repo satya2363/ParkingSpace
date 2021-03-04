@@ -42,6 +42,9 @@ public class ParkingController {
     @GetMapping(
             path = "/lotsByCityAndZipcode")
     public @ResponseBody Iterable<ParkingLot> getAllParkingLots(@RequestParam String city, @RequestParam int zipcode) {
+        //verify params
+        //Authentication
+        //Throttle
         return queryService.parkingLotQuery(city, zipcode);
     }
 

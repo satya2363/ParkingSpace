@@ -19,11 +19,12 @@ import com.parkingspace.repositories.ParkingRepository;
 import com.parkingspace.repositories.ParkingSpotRepository;
 import com.parkingspace.repositories.TicketRepository;
 import com.parkingspace.services.QueryService;
+import com.parkingspace.utils.RandomStringGenerator;
 
 @RestController
 public class TicketController {
     Logger                       log     = LoggerFactory.getLogger(TicketController.class);
-
+    int                          BAR_CODE_LENGTH;
     @Autowired
     QueryService                 queryService;
 
@@ -49,14 +50,19 @@ public class TicketController {
         //if the current spot we book is the last one, then update availability in the table
         //ParkingAvailabilityDTO parkingDTO = queryService.getParkingLotAvailability(ticket.getParkingLotId(), ticket.getFloorNumber());
         ParkingAvailabilityDTO parkingDTO = parkingRepo.parkingLotAvailable(ticket.getParkingLotId(), ticket.getFloorNumber());
-
+        //async ?
+        //exception handling
         if (parkingDTO.getIsFull().equals("false")) {
             log.info("Spots are available");
             parkingSpotRepo.updateSlot(IS_FREE, ticket.getLicenseNumber(), ticket.getSpotNumber(), parkingDTO.getFloorId());
             String spotsAvailable = parkingDTO.getTotalSpots() < 2 ? "false" : "true";
             floorRepo.updateFloor(spotsAvailable, ticket.getFloorNumber(), parkingDTO.getTotalSpots() - 1, ticket.getParkingLotId());
+            ticket.setBarCode(getbarCode());
+            //            ticket.setIssuedAt();
+            //            ticket.setPayedAt(payedAt);
+            //            ticket.setStartTime(startTime);
             ParkingTicket pt = ticketRepo.save(ticket);
-            return pt != null ? true : false;
+            return true;
         } else {
             log.error("No more Spots Available");
             //Throw exception
@@ -70,5 +76,10 @@ public class TicketController {
             path = "/getTicket")
     public @ResponseBody Optional<ParkingTicket> getTicket(@RequestParam int ticketId) {
         return ticketRepo.findById(ticketId);
+    }
+
+    private String getbarCode() {
+        RandomStringGenerator randString = new RandomStringGenerator();
+        return randString.getAlphaNumericCode(BAR_CODE_LENGTH);
     }
 }
