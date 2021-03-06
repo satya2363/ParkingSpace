@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.parkingspace.models.Location;
 import com.parkingspace.models.ParkingLot;
 import com.parkingspace.repositories.ParkingRepository;
 import com.parkingspace.services.QueryService;
@@ -35,19 +34,24 @@ public class ParkingController {
     public @ResponseBody Iterable<ParkingLot> getAllParkingLots() {
         List<ParkingLot> parkingLots = (List<ParkingLot>) parkingRepository.findAll();
         parkingLots.stream().map(p -> p.getAddress().getStreet_name()).forEach(System.out::println);
-        ;
         //System.out.println(parkingRepository.findAll());
         // This returns a JSON or XML with the users
         return parkingRepository.findAll();
     }
 
     @GetMapping(
-            path = "/LotsByCityAndZipcode")
+            path = "/lotsByCityAndZipcode")
     public @ResponseBody Iterable<ParkingLot> getAllParkingLots(@RequestParam String city, @RequestParam int zipcode) {
-        Location address = new Location();
-        address.setCity(city);
-        address.setZipcode(zipcode);
+        //verify params
+        //Authentication
+        //Throttle
         return queryService.parkingLotQuery(city, zipcode);
-
     }
+
+    @GetMapping(
+            path = "/generateTicket")
+    public @ResponseBody Iterable<ParkingLot> generateTicket(@RequestParam String city, @RequestParam int zipcode) {
+        return queryService.parkingLotQuery(city, zipcode);
+    }
+
 }

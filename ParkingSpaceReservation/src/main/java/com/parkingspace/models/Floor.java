@@ -10,8 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -23,11 +23,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ParkingLot implements Serializable {
+public class Floor implements Serializable {
 
-    /**
-     *
-     */
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(
@@ -37,21 +34,32 @@ public class ParkingLot implements Serializable {
     private int               id;
 
     @Column(
-            name = "name")
-    private String            name;
-
-    @OneToOne(
-            cascade = CascadeType.ALL)
-    @JoinColumn(
-            name = "address_id",
-            referencedColumnName = "id")
-    private Location          address;
+            name = "number")
+    private String            number;
 
     @Column(
-            name = "is_full")
-    private String            isFull;
+            name = "total_spots")
+    private int               totalSpots;
+
+    @Column(
+            name = "spots_available")
+    private String            spotsAvailable;
     @JsonIgnore
     @OneToMany(
-            mappedBy = "parkingLot")
-    private Set<Floor>        floors;
+            mappedBy = "floor")
+    private Set<ParkingSpot>  spots;
+    @ManyToOne(
+            cascade = CascadeType.ALL)
+    @JoinColumn(
+            name = "parking_id",
+            referencedColumnName = "id")
+    private ParkingLot        parkingLot;
+
+    //    @OneToOne(
+    //            cascade = CascadeType.ALL)
+    //    @JoinColumn(
+    //            name = "spot_type_count_id",
+    //            referencedColumnName = "id")
+    //    private SpotTypeCount     spotTypeCount;
+
 }
