@@ -5,7 +5,7 @@ import java.util.List;
 import com.parkingspace.DTO.ParkingAvailabilityDTO;
 import com.parkingspace.models.ParkingLot;
 
-public interface IQueryService {
+public interface IParkingService {
 
     List<ParkingLot> parkingLotQuery(String city, int zipcode);
 

@@ -13,5 +13,5 @@ public interface FloorRepository extends CrudRepository<Floor, Integer> {
     @Transactional
     @Modifying
     @Query("update Floor fl set fl.spotsAvailable=:spotsAvailable, fl.totalSpots=:totalSpots where fl.number=:floorNumber AND fl.parkingLot.id=:parkingId")
-    public void updateFloor(@Param("spotsAvailable") String spotsAvailable, @Param("floorNumber") String floorNumber, @Param("totalSpots") int totalSpots, @Param("parkingId") int parkingLotId);
+    public void updateFloor(@Param("spotsAvailable") String spotsAvailable, @Param("floorNumber") int floorNumber, @Param("totalSpots") int totalSpots, @Param("parkingId") int parkingLotId);
 }

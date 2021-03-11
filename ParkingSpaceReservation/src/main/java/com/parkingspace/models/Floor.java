@@ -35,7 +35,7 @@ public class Floor implements Serializable {
 
     @Column(
             name = "number")
-    private String            number;
+    private int               number;
 
     @Column(
             name = "total_spots")
