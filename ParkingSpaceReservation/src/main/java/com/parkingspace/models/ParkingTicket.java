@@ -66,6 +66,10 @@ public class ParkingTicket {
             name = "bar_code")
     String        barCode;
 
+    @Column(
+            name = "duration")
+    long          duration;
+
     public int getId() {
         return id;
     }

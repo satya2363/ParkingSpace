@@ -47,18 +47,20 @@ public class TicketServiceImpl implements ITicketService {
         //ParkingAvailabilityDTO parkingDTO = queryService.getParkingLotAvailability(ticket.getParkingLotId(), ticket.getFloorNumber());
         ParkingAvailabilityDTO parkingDTO = parkingRepo.getparkingLotAvailability(ticket.getParkingLotId(), ticket.getFloorNumber());
         //async ?
-        //exception handling
+        //TODO exception handling
         if (parkingDTO.getIsFull().equals("false")) {
             log.info("Spots are available");
+
             parkingSpotRepo.updateSlot(IS_FREE, ticket.getLicenseNumber(), ticket.getSpotNumber(), parkingDTO.getFloorId());
             String spotsAvailable = parkingDTO.getTotalSpots() < 2 ? "false" : "true";
+            //TODO make this async
             floorRepo.updateFloor(spotsAvailable, ticket.getFloorNumber(), parkingDTO.getTotalSpots() - 1, ticket.getParkingLotId());
             ticket.setBarCode(getbarCode());
-            ticket.setEndTime(findEndTime(ticket.getStartTime()));
+            ticket.setEndTime(findEndTime(ticket.getStartTime(), ticket.getDuration()));
             ticketRepo.save(ticket);
         } else {
             log.error("No more Spots Available");
-            //Throw exception
+            //TODO Throw exception
         }
         return ticket;
     }
@@ -67,8 +69,8 @@ public class TicketServiceImpl implements ITicketService {
         return ticketRepo.findById(ticketId);
     }
 
-    private LocalDateTime findEndTime(LocalDateTime startTime) {
-        return startTime.plusHours(2);
+    private LocalDateTime findEndTime(LocalDateTime startTime, long duration) {
+        return startTime.plusHours(duration);
     }
 
     private String getbarCode() {
