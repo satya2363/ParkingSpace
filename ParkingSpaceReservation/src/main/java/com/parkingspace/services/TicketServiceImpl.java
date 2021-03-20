@@ -41,10 +41,10 @@ public class TicketServiceImpl implements ITicketService {
     //multithreading / Thread pool
     @Override
     public ParkingTicket createTicket(ParkingTicket ticket) {
-        //check if the parking is still available
-        //by querying the parking lot table and get the total number of spots available.
-        //if the current spot we book is the last one, then update availability in the table
-        //ParkingAvailabilityDTO parkingDTO = queryService.getParkingLotAvailability(ticket.getParkingLotId(), ticket.getFloorNumber());
+        /*  check if the parking is still available
+        by querying the parking lot table and get the total number of spots available.
+        if the current spot we book is the last one, then update availability in the table
+        ParkingAvailabilityDTO parkingDTO = queryService.getParkingLotAvailability(ticket.getParkingLotId(), ticket.getFloorNumber());*/
         ParkingAvailabilityDTO parkingDTO = parkingRepo.getparkingLotAvailability(ticket.getParkingLotId(), ticket.getFloorNumber());
         //async ?
         //TODO exception handling
