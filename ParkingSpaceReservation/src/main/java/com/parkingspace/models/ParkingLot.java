@@ -3,8 +3,6 @@ package com.parkingspace.models;
 import java.io.Serializable;
 import java.util.Set;
 
-import java.util.List;
-import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -30,20 +30,29 @@ public class ParkingLot implements Serializable {
      */
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
-    private int id;
 
-    @Column(name = "name")
-    private String name;
+    @GeneratedValue(
+            strategy = GenerationType.AUTO)
+    @Column(
+            name = "id")
+    private int               id;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "address_id", referencedColumnName = "id")
-    private Location address;
+    @Column(
+            name = "name")
+    private String            name;
 
-    @Column(name = "is_full")
-    private String isFull;
+    @OneToOne(
+            cascade = CascadeType.ALL)
+    @JoinColumn(
+            name = "address_id",
+            referencedColumnName = "id")
+    private Location          address;
 
-    @OneToMany(mappedBy = "parkingLot")
-    private Set<Floor> floors;
+    @Column(
+            name = "is_full")
+    private String            isFull;
+    @JsonIgnore
+    @OneToMany(
+            mappedBy = "parkingLot")
+    private Set<Floor>        floors;
 }
