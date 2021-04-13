@@ -2,18 +2,21 @@ package com.parkingspace.services;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.parkingspace.DTO.ParkingAvailabilityDTO;
+import com.parkingspace.DTO.SpotAvailabilityDTO;
+import com.parkingspace.Exceptions.NoResultForQueryException;
 import com.parkingspace.controllers.TicketController;
 import com.parkingspace.models.ParkingTicket;
 import com.parkingspace.repositories.FloorRepository;
 import com.parkingspace.repositories.ParkingRepository;
 import com.parkingspace.repositories.ParkingSpotRepository;
+import com.parkingspace.repositories.SpotRepository;
 import com.parkingspace.repositories.TicketRepository;
 import com.parkingspace.utils.RandomStringGenerator;
 
@@ -32,32 +35,40 @@ public class TicketServiceImpl implements ITicketService {
 
     @Autowired
     public ParkingSpotRepository parkingSpotRepo;
-
+    @Autowired
+    public SpotRepository        spotRepo;
     @Autowired
     public FloorRepository       floorRepo;
 
-    private String               IS_FREE         = "false";
+    private String               IS_NOT_FREE     = "false";
 
     //multithreading / Thread pool
     @Override
-    public ParkingTicket createTicket(ParkingTicket ticket) {
-        /*  check if the parking is still available
-        by querying the parking lot table and get the total number of spots available.
-        if the current spot we book is the last one, then update availability in the table
-        ParkingAvailabilityDTO parkingDTO = queryService.getParkingLotAvailability(ticket.getParkingLotId(), ticket.getFloorNumber());*/
-        ParkingAvailabilityDTO parkingDTO = parkingRepo.getparkingLotAvailability(ticket.getParkingLotId(), ticket.getFloorNumber());
+    public ParkingTicket createTicket(ParkingTicket ticket) throws NoResultForQueryException {
+
+        //Fetch spot types and their counts
+        Set<SpotAvailabilityDTO> spotTypeCountDTOResults = spotRepo.getparkingSpotAvailability(ticket.getParkingLotId(), ticket.getSpotType());
+        SpotAvailabilityDTO spotTypeCountDTO = spotTypeCountDTOResults.stream().findFirst().orElse(new SpotAvailabilityDTO(-1, -1, -1, "", "", -1, -1)); //handle this with custom exceptions
         //async ?
         //TODO exception handling
-        if (parkingDTO.getIsFull().equals("false")) {
+        System.out.println(spotTypeCountDTO.getFloorId() + " == " + spotTypeCountDTO.getParkingLotId() + "== " + spotTypeCountDTO.getSpotType() + " == " + spotTypeCountDTO.getSpotTypeCount());
+        if (spotTypeCountDTO.getTotalSpots() > 0) {
             log.info("Spots are available");
-
-            parkingSpotRepo.updateSlot(IS_FREE, ticket.getLicenseNumber(), ticket.getSpotNumber(), parkingDTO.getFloorId());
-            String spotsAvailable = parkingDTO.getTotalSpots() < 2 ? "false" : "true";
+            //ParkingAvailabilityDTO parkingDTO = parkingService.getParkingLotAvailability(ticket.getParkingLotId(), ticket.getFloorNumber());
+            parkingSpotRepo.updateSlot(IS_NOT_FREE, ticket.getLicenseNumber(), spotTypeCountDTO.getSpotNumber(), spotTypeCountDTO.getFloorId());
+            String spotsAvailable = spotTypeCountDTO.getTotalSpots() < 2 ? "false" : "true";
             //TODO make this async
-            floorRepo.updateFloor(spotsAvailable, ticket.getFloorNumber(), parkingDTO.getTotalSpots() - 1, ticket.getParkingLotId());
+            floorRepo.updateFloor(spotsAvailable, ticket.getFloorNumber(), spotTypeCountDTO.getTotalSpots() - 1, ticket.getParkingLotId());
             ticket.setBarCode(getbarCode());
             ticket.setEndTime(findEndTime(ticket.getStartTime(), ticket.getDuration()));
+            ticket.setFloorNumber(spotTypeCountDTO.getFloorId());
+            ticket.setSpotNumber(spotTypeCountDTO.getSpotNumber());
+            //ticket.set
             ticketRepo.save(ticket);
+        } else if (spotTypeCountDTO.getTotalSpots() < 0) {
+            log.error("No result for the query");
+            throw new NoResultForQueryException("No result for the query");
+            // TODO Throw exception
         } else {
             log.error("No more Spots Available");
             //TODO Throw exception

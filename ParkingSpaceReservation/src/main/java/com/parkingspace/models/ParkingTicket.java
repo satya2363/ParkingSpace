@@ -59,6 +59,9 @@ public class ParkingTicket {
             name = "spot_number")
     int           spotNumber;
     @Column(
+            name = "spot_type")
+    String        spotType;
+    @Column(
             name = "license_number")
     String        licenseNumber;
 

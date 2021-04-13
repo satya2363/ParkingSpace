@@ -12,6 +12,7 @@ public class ParkingAvailabilityDTO {
         this.spotsAvailable = spotsAvailable;
         this.totalSpots = totalSpots;
         this.floorId = floorId;
+
     }
 
     public String getIsFull() {

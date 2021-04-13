@@ -44,6 +44,7 @@ public class ParkingServiceImpl implements IParkingService {
         @SuppressWarnings("unchecked")
         List<ParkingSpot> parkingSpots = query.getResultList();
         em.close();
+        //parkingSpots.stream().map(mapper)
         return parkingSpots;
     }
 

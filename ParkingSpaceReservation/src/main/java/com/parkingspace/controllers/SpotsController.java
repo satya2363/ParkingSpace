@@ -18,4 +18,5 @@ public class SpotsController {
     //    public @ResponseBody Iterable<ParkingSpot> getAvailableParkingSpots(@RequestParam int parkingLotId) {
     //        return queryService.spotQuery(parkingLotId);
     //    }
+
 }

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.parkingspace.Exceptions.NoResultForQueryException;
 import com.parkingspace.models.ParkingTicket;
 import com.parkingspace.repositories.FloorRepository;
 import com.parkingspace.repositories.ParkingRepository;
@@ -45,7 +46,7 @@ public class TicketController {
     // multi threaded testing
     @PostMapping(
             path = "/Ticket/generateTicket")
-    public @ResponseBody ParkingTicket generateTicket(@RequestBody ParkingTicket ticket) {
+    public @ResponseBody ParkingTicket generateTicket(@RequestBody ParkingTicket ticket) throws NoResultForQueryException {
         return ticketService.createTicket(ticket);
     }
 
