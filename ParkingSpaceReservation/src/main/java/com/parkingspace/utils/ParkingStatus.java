@@ -1,5 +1,5 @@
 package com.parkingspace.utils;
 
 public enum ParkingStatus {
-    ACTIVE, PAID, LOST
+    ACTIVE, PAID, LOST, INACTIVE, PENDING
 }

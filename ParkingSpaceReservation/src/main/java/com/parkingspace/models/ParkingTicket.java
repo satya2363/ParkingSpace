@@ -72,6 +72,9 @@ public class ParkingTicket {
     @Column(
             name = "duration")
     long          duration;
+    @Column(
+            name = "phone_number")
+    long          phoneNumber;
 
     public int getId() {
         return id;

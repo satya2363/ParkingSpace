@@ -1,5 +1,6 @@
 package com.parkingspace.controllers;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.parkingspace.DTO.ExpiredTicketDTO;
 import com.parkingspace.Exceptions.NoResultForQueryException;
 import com.parkingspace.models.ParkingTicket;
 import com.parkingspace.repositories.FloorRepository;
@@ -54,6 +56,12 @@ public class TicketController {
             path = "/Ticket/getTicket")
     public @ResponseBody Optional<ParkingTicket> getTicket(@RequestParam int ticketId) {
         return ticketService.getTicketById(ticketId);
+    }
+
+    @GetMapping(
+            path = "/Ticket/getExpiredTickets")
+    public @ResponseBody List<ExpiredTicketDTO> getExpiredTickets() {
+        return ticketService.getExpiredParkingTickets();
     }
 
 }

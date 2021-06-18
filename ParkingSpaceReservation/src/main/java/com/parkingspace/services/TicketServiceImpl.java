@@ -1,6 +1,7 @@
 package com.parkingspace.services;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -9,36 +10,37 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.parkingspace.DTO.ExpiredTicketDTO;
 import com.parkingspace.DTO.SpotAvailabilityDTO;
 import com.parkingspace.Exceptions.NoResultForQueryException;
-import com.parkingspace.controllers.TicketController;
 import com.parkingspace.models.ParkingTicket;
+import com.parkingspace.models.RegisteredUser;
 import com.parkingspace.repositories.FloorRepository;
 import com.parkingspace.repositories.ParkingRepository;
 import com.parkingspace.repositories.ParkingSpotRepository;
 import com.parkingspace.repositories.SpotRepository;
 import com.parkingspace.repositories.TicketRepository;
+import com.parkingspace.repositories.UserRepository;
 import com.parkingspace.utils.RandomStringGenerator;
 
 @Service
 public class TicketServiceImpl implements ITicketService {
-    Logger                       log             = LoggerFactory.getLogger(TicketController.class);
+    Logger                       log             = LoggerFactory.getLogger(TicketServiceImpl.class);
     int                          BAR_CODE_LENGTH = 10;
     @Autowired
-    ParkingServiceImpl           parkingService;
-
+    private IParkingService      parkingService;
     @Autowired
     public ParkingRepository     parkingRepo;
-
     @Autowired
     public TicketRepository      ticketRepo;
-
     @Autowired
     public ParkingSpotRepository parkingSpotRepo;
     @Autowired
     public SpotRepository        spotRepo;
     @Autowired
     public FloorRepository       floorRepo;
+    @Autowired
+    public UserRepository        userRepo;
 
     private String               IS_NOT_FREE     = "false";
 
@@ -59,11 +61,14 @@ public class TicketServiceImpl implements ITicketService {
             String spotsAvailable = spotTypeCountDTO.getTotalSpots() < 2 ? "false" : "true";
             //TODO make this async
             floorRepo.updateFloor(spotsAvailable, ticket.getFloorNumber(), spotTypeCountDTO.getTotalSpots() - 1, ticket.getParkingLotId());
+            userRepo.updateUser(ticket.getStatus(), ticket.getPhoneNumber());
             ticket.setBarCode(getbarCode());
             ticket.setEndTime(findEndTime(ticket.getStartTime(), ticket.getDuration()));
             ticket.setFloorNumber(spotTypeCountDTO.getFloorId());
             ticket.setSpotNumber(spotTypeCountDTO.getSpotNumber());
             //ticket.set
+            Optional<RegisteredUser> optionalUser = userRepo.findById(ticket.getPhoneNumber());
+
             ticketRepo.save(ticket);
         } else if (spotTypeCountDTO.getTotalSpots() < 0) {
             log.error("No result for the query");
@@ -87,5 +92,12 @@ public class TicketServiceImpl implements ITicketService {
     private String getbarCode() {
         RandomStringGenerator randString = new RandomStringGenerator();
         return randString.getAlphaNumericCode(BAR_CODE_LENGTH);
+    }
+
+    @Override
+    public List<ExpiredTicketDTO> getExpiredParkingTickets() {
+        System.out.println("Expired car spots");
+        return ticketRepo.getExpiredParkingTickets();
+
     }
 }
