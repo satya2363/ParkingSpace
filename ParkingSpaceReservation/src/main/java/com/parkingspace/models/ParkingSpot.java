@@ -55,4 +55,8 @@ public class ParkingSpot implements Serializable {
             name = "license_number")
     private String            licenseNumber;
 
+    // TODO: understand why license number join wasnt needed?
+    //    @OneToOne(cascade = CascadeType.ALL)
+    //    @JoinColumn(name = "vehicle_license_number", referencedColumnName = "vehicle_license_number")
+    //    private String vehicleLicenseNumber;
 }

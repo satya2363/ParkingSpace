@@ -25,41 +25,42 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Floor implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long  serialVersionUID = 1L;
     @Id
     @GeneratedValue(
             strategy = GenerationType.AUTO)
     @Column(
             name = "id")
-    private int               id;
+    private int                id;
 
     @Column(
             name = "number")
-    private String            number;
+    private int                number;
 
     @Column(
             name = "total_spots")
-    private int               totalSpots;
+    private int                totalSpots;
 
     @Column(
             name = "spots_available")
-    private String            spotsAvailable;
+    private String             spotsAvailable;
+
     @JsonIgnore
     @OneToMany(
             mappedBy = "floor")
-    private Set<ParkingSpot>  spots;
+    private Set<ParkingSpot>   spots;
     @ManyToOne(
             cascade = CascadeType.ALL)
     @JoinColumn(
             name = "parking_id",
             referencedColumnName = "id")
-    private ParkingLot        parkingLot;
-
-    //    @OneToOne(
-    //            cascade = CascadeType.ALL)
-    //    @JoinColumn(
-    //            name = "spot_type_count_id",
-    //            referencedColumnName = "id")
-    //    private SpotTypeCount     spotTypeCount;
+    private ParkingLot         parkingLot;
+    @JsonIgnore
+    @OneToMany(
+            mappedBy = "floor")
+    private Set<SpotTypeCount> spotTypeCounts;
+    //    @OneToMany(cascade = CascadeType.ALL)
+    //    @JoinColumn(name = "spot_id", referencedColumnName = "id")
+    //    private int spotId;
 
 }

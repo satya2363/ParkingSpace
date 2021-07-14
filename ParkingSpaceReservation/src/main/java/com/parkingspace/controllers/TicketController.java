@@ -1,5 +1,6 @@
 package com.parkingspace.controllers;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -12,22 +13,24 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.parkingspace.DTO.ParkingAvailabilityDTO;
+import com.parkingspace.DTO.ExpiredTicketDTO;
+import com.parkingspace.Exceptions.NoResultForQueryException;
 import com.parkingspace.models.ParkingTicket;
 import com.parkingspace.repositories.FloorRepository;
 import com.parkingspace.repositories.ParkingRepository;
 import com.parkingspace.repositories.ParkingSpotRepository;
 import com.parkingspace.repositories.TicketRepository;
-import com.parkingspace.services.QueryService;
-import com.parkingspace.utils.RandomStringGenerator;
+import com.parkingspace.services.ParkingServiceImpl;
+import com.parkingspace.services.TicketServiceImpl;
 
 @RestController
 public class TicketController {
-    Logger                       log     = LoggerFactory.getLogger(TicketController.class);
-    int                          BAR_CODE_LENGTH;
+    Logger                       log             = LoggerFactory.getLogger(TicketController.class);
+    int                          BAR_CODE_LENGTH = 10;
     @Autowired
-    QueryService                 queryService;
-
+    ParkingServiceImpl           parkingService;
+    @Autowired
+    TicketServiceImpl            ticketService;
     @Autowired
     public ParkingRepository     parkingRepo;
 
@@ -40,46 +43,25 @@ public class TicketController {
     @Autowired
     public FloorRepository       floorRepo;
 
-    private String               IS_FREE = "false";
+    private String               IS_FREE         = "false";
 
+    // multi threaded testing
     @PostMapping(
-            path = "/generateTicket")
-    public @ResponseBody boolean generateTicket(@RequestBody ParkingTicket ticket) {
-        //check if the parking is still available
-        //by querying the parking lot table and get the total number of spots available.
-        //if the current spot we book is the last one, then update availability in the table
-        //ParkingAvailabilityDTO parkingDTO = queryService.getParkingLotAvailability(ticket.getParkingLotId(), ticket.getFloorNumber());
-        ParkingAvailabilityDTO parkingDTO = parkingRepo.parkingLotAvailable(ticket.getParkingLotId(), ticket.getFloorNumber());
-        //async ?
-        //exception handling
-        if (parkingDTO.getIsFull().equals("false")) {
-            log.info("Spots are available");
-            parkingSpotRepo.updateSlot(IS_FREE, ticket.getLicenseNumber(), ticket.getSpotNumber(), parkingDTO.getFloorId());
-            String spotsAvailable = parkingDTO.getTotalSpots() < 2 ? "false" : "true";
-            floorRepo.updateFloor(spotsAvailable, ticket.getFloorNumber(), parkingDTO.getTotalSpots() - 1, ticket.getParkingLotId());
-            ticket.setBarCode(getbarCode());
-            //            ticket.setIssuedAt();
-            //            ticket.setPayedAt(payedAt);
-            //            ticket.setStartTime(startTime);
-            ParkingTicket pt = ticketRepo.save(ticket);
-            return true;
-        } else {
-            log.error("No more Spots Available");
-            //Throw exception
-            return false;
-        }
-
-        //return queryService.parkingLotQuery(city, zipcode);
+            path = "/Ticket/generateTicket")
+    public @ResponseBody ParkingTicket generateTicket(@RequestBody ParkingTicket ticket) throws NoResultForQueryException {
+        return ticketService.createTicket(ticket);
     }
 
     @GetMapping(
-            path = "/getTicket")
+            path = "/Ticket/getTicket")
     public @ResponseBody Optional<ParkingTicket> getTicket(@RequestParam int ticketId) {
-        return ticketRepo.findById(ticketId);
+        return ticketService.getTicketById(ticketId);
     }
 
-    private String getbarCode() {
-        RandomStringGenerator randString = new RandomStringGenerator();
-        return randString.getAlphaNumericCode(BAR_CODE_LENGTH);
+    @GetMapping(
+            path = "/Ticket/getExpiredTickets")
+    public @ResponseBody List<ExpiredTicketDTO> getExpiredTickets() {
+        return ticketService.getExpiredParkingTickets();
     }
+
 }
