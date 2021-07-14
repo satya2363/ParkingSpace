@@ -18,7 +18,6 @@ import com.parkingspace.models.RegisteredUser;
 import com.parkingspace.repositories.FloorRepository;
 import com.parkingspace.repositories.ParkingRepository;
 import com.parkingspace.repositories.ParkingSpotRepository;
-import com.parkingspace.repositories.SpotRepository;
 import com.parkingspace.repositories.TicketRepository;
 import com.parkingspace.repositories.UserRepository;
 import com.parkingspace.utils.RandomStringGenerator;
@@ -35,8 +34,8 @@ public class TicketServiceImpl implements ITicketService {
     public TicketRepository      ticketRepo;
     @Autowired
     public ParkingSpotRepository parkingSpotRepo;
-    @Autowired
-    public SpotRepository        spotRepo;
+    //    @Autowired
+    //    public SpotRepository        spotRepo;
     @Autowired
     public FloorRepository       floorRepo;
     @Autowired
@@ -49,7 +48,7 @@ public class TicketServiceImpl implements ITicketService {
     public ParkingTicket createTicket(ParkingTicket ticket) throws NoResultForQueryException {
 
         //Fetch spot types and their counts
-        Set<SpotAvailabilityDTO> spotTypeCountDTOResults = spotRepo.getparkingSpotAvailability(ticket.getParkingLotId(), ticket.getSpotType());
+        Set<SpotAvailabilityDTO> spotTypeCountDTOResults = parkingSpotRepo.getparkingSpotAvailability(ticket.getParkingLotId(), ticket.getSpotType());
         SpotAvailabilityDTO spotTypeCountDTO = spotTypeCountDTOResults.stream().findFirst().orElse(new SpotAvailabilityDTO(-1, -1, -1, "", "", -1, -1)); //handle this with custom exceptions
         //async ?
         //TODO exception handling

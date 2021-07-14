@@ -19,16 +19,18 @@ public class SchedulerTask {
     ITicketService ticketService;
 
     @Scheduled(
-            fixedRate = 10000)
+            fixedRate = 15000)
     public void startSchedulerTask() {
         System.out.println(Thread.currentThread().getName() + " -- Current Thread Name");
         try {
-            Thread.sleep(10000);
+            //Thread.sleep(10000);
             getExpiredCarSpots();
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (NullPointerException e) {
+        }
+        //catch (InterruptedException e) {
+        //            // TODO Auto-generated catch block
+        //            e.printStackTrace();
+        //        } 
+        catch (NullPointerException e) {
             e.printStackTrace();
         }
 
@@ -55,6 +57,7 @@ public class SchedulerTask {
 
         List<ExpiredTicketDTO> expiredTickets = ticketService.getExpiredParkingTickets();
         System.out.println("All Expired Tickets-->" + expiredTickets.size());
+        //send Notification
         expiredTickets.stream().forEach(s -> System.out.println(s.getphoneNumber() + " ==> " + s.getEndTime()));
 
     }
