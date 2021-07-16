@@ -1,0 +1,14 @@
+ {
+	"id":4,
+	"ticketNumber":"4",
+	"status": "ACTIVE",
+	"spotType":"COMPACT",
+	"parkingLotName":"Hansen-Purdy",
+	"payedAmount":5.00,
+	"parkingLotId":2,
+    "licenseNumber":"11ZT00",
+    "issuedAt":"2018-06-20T08:00",
+    "startTime":"2018-06-20T10:30",
+    "payedAt":"2018-06-20T08:30",
+    "phoneNumber":"8572721500"
+	}
