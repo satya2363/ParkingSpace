@@ -51,20 +51,17 @@ public class TicketServiceImpl implements ITicketService {
         SpotAvailabilityDTO spotTypeCountDTO = spotTypeCountDTOResults.stream().findFirst().orElse(new SpotAvailabilityDTO(-1, -1, -1, -1, "", "", "", -1)); //handle this with custom exceptions
         //async ?
         //TODO exception handling
-        System.out.println(spotTypeCountDTO.getFloorId() + " == " + spotTypeCountDTO.getParkingLotId() + "== " + spotTypeCountDTO.getSpotType());
+
         if (spotTypeCountDTO.getTotalSpots() > 0) {
-            log.info("Spots are available");
-            //ParkingAvailabilityDTO parkingDTO = parkingService.getParkingLotAvailability(ticket.getParkingLotId(), ticket.getFloorNumber());
+            log.debug("Spots are available");
             parkingSpotRepo.updateSlot(IS_NOT_FREE, ticket.getLicenseNumber(), spotTypeCountDTO.getSpotNumber(), spotTypeCountDTO.getFloorId());
             String spotsAvailable = spotTypeCountDTO.getTotalSpots() < 2 ? "false" : "true";
             //TODO make this async
             floorRepo.updateFloor(spotsAvailable, ticket.getFloorNumber(), spotTypeCountDTO.getTotalSpots() - 1, ticket.getParkingLotId());
             userRepo.updateUser(ticket.getStatus(), ticket.getPhoneNumber());
-            ticket.setBarCode(getbarCode());
-            ticket.setEndTime(findEndTime(ticket.getStartTime(), ticket.getDuration()));
-            ticket.setFloorNumber(spotTypeCountDTO.getFloorNumber());
-            ticket.setSpotNumber(spotTypeCountDTO.getSpotNumber());
             //ticket.set
+            ticket = setTicket(ticket, spotTypeCountDTO);
+
             Optional<RegisteredUser> optionalUser = userRepo.findById(ticket.getPhoneNumber());
 
             ticketRepo.save(ticket);
@@ -77,6 +74,15 @@ public class TicketServiceImpl implements ITicketService {
             //TODO Throw exception
         }
         return ticket;
+    }
+
+    private ParkingTicket setTicket(ParkingTicket ticket, SpotAvailabilityDTO spotTypeCountDTO) {
+        ticket.setBarCode(getbarCode());
+        ticket.setEndTime(findEndTime(ticket.getStartTime(), ticket.getDuration()));
+        ticket.setFloorNumber(spotTypeCountDTO.getFloorNumber());
+        ticket.setSpotNumber(spotTypeCountDTO.getSpotNumber());
+        return ticket;
+
     }
 
     public Optional<ParkingTicket> getTicketById(int ticketId) {
