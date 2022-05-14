@@ -2,20 +2,23 @@ package com.parkingspace.DTO;
 
 public class SpotAvailabilityDTO {
     private int    floorId;
+    private int    floorNumber;
     private int    totalSpots;
     private int    parkingLotId;
     private String spotsAvailable;
     private String spotType;
-    private int    spotTypeCount;
     private int    spotNumber;
 
-    public SpotAvailabilityDTO(int floorId, int totalSpots, int parkingLotId, String spotsAvailable, String spotType, int spotTypeCount, int spotNumber) {
+    public SpotAvailabilityDTO() {
+    }
+
+    public SpotAvailabilityDTO(int floorId, int floorNumber, int totalSpots, int parkingLotId, String spotsAvailable, String isSpotFree, String spotType, int spotNumber) {
         this.floorId = floorId;
         this.totalSpots = totalSpots;
+        this.setFloorNumber(floorNumber);
         this.parkingLotId = parkingLotId;
         this.spotsAvailable = spotsAvailable;
         this.spotType = spotType;
-        this.spotTypeCount = spotTypeCount;
         this.spotNumber = spotNumber;
 
     }
@@ -60,14 +63,6 @@ public class SpotAvailabilityDTO {
         this.spotType = spotType;
     }
 
-    public int getSpotTypeCount() {
-        return spotTypeCount;
-    }
-
-    public void setSpotTypeCount(int spotTypeCount) {
-        this.spotTypeCount = spotTypeCount;
-    }
-
     public int getSpotNumber() {
         return spotNumber;
     }
@@ -78,6 +73,21 @@ public class SpotAvailabilityDTO {
 
     public String getSpotsAvailable() {
         return spotsAvailable;
+    }
+
+    /**
+     * @return the floorNumber
+     */
+    public int getFloorNumber() {
+        return floorNumber;
+    }
+
+    /**
+     * @param floorNumber
+     *            the floorNumber to set
+     */
+    public void setFloorNumber(int floorNumber) {
+        this.floorNumber = floorNumber;
     }
 
 }
